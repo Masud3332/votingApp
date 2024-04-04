@@ -2,10 +2,10 @@ import { pPollModel } from "../models/pPollModel.js";
 export const getParticipantsForVoting = async (req, res) => {
   try {
     const participants = await pPollModel.find();
-    res.json({ participants });
+    res.status(200).send(participants);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).send({ error: "Internal Server Error" });
   }
 };
 
@@ -17,7 +17,7 @@ export const voteParticipant = async (req, res) => {
     const participant = await pPollModel.findOne({ pName, pOrganization });
 
     if (!participant) {
-      return res.status(404).json({ error: "Participant not found" });
+      return res.status(404).send({ error: "Participant not found" });
     }
 
     // Update the vote count
@@ -26,9 +26,11 @@ export const voteParticipant = async (req, res) => {
     // Save the updated participant
     const newParticipant = await participant.save();
 
-    res.json({ message: "Vote recorded successfully", newParticipant });
+    res
+      .status(200)
+      .send({ message: "Vote recorded successfully", newParticipant });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).send({ error: "Internal Server Error" });
   }
 };
 
@@ -39,8 +41,8 @@ export const getVoteCount = async (req, res) => {
     participants.forEach((participant) => {
       totalVotes += participant.pVote;
     });
-    res.json({ totalVotes });
+    res.status(200).send(totalVotes);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).send({ error: err.message });
   }
 };

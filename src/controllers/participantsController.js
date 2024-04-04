@@ -36,15 +36,17 @@ export const Participantslogin = async (req, res) => {
     const participant = await participantsModel.findOne({ pId });
 
     if (!participant) {
-      return res.status(404).json({ error: "Participant not found" });
+      return res.status(404).send({ error: "Participant not found" });
     }
     if (participant.pPassword !== pPassword) {
-      return res.status(401).json({ error: "Incorrect password" });
+      return res.status(401).js.send({ error: "Incorrect password" });
     }
-    return res.status(200).json({ message: "Login successful", participant });
+    return res
+      .status(200)
+      .js.send({ message: "Login successful", participant });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).js.send({ error: "Internal Server Error" });
   }
 };
 
@@ -60,17 +62,17 @@ export const ParticipantsUpdate = async (req, res) => {
     );
 
     if (!updatedParticipant) {
-      return res.status(404).json({ message: "Participant not found" });
+      return res.status(404).send({ message: "Participant not found" });
     }
 
-    return res.status(200).json({
+    return res.status(200).send({
       message: "Participant updated successfully",
       data: updatedParticipant,
     });
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+      .send({ message: "Internal Server Error", error: error.message });
   }
 };
 
